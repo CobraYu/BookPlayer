@@ -481,6 +481,15 @@ extension LibraryViewController {
             return cell
         }
 
+        do {
+            let data = try fileURL.extendedAttribute(forName: "com.bookplayer.app")
+            let string1 = String(bytes: data, encoding: .utf8)
+            print("====")
+            print(string1)
+        } catch {
+            print("==== failed")
+        }
+
         bookCell.playbackState = .paused
 
         return bookCell

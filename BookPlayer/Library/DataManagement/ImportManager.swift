@@ -19,7 +19,7 @@ class ImportManager {
     private var files = [FileItem]()
 
     func process(_ fileUrl: URL, destinationFolder: URL) {
-        guard !self.files.contains(where: { $0.originalUrl == fileUrl }) else { return }
+        guard !self.files.contains(where: { $0.originalUrl == fileUrl }), !fileUrl.hasAppKey() else { return }
 
         // Avoid processing the creation of the Processed and Inbox folder
         if fileUrl.lastPathComponent == DataManager.processedFolderName

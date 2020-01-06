@@ -21,6 +21,8 @@ public class DataManager {
     public class func getProcessedFolderURL() -> URL {
         let documentsURL = self.getDocumentsFolderURL()
 
+        return documentsURL
+
         let processedFolderURL = documentsURL.appendingPathComponent(self.processedFolderName)
 
         if !FileManager.default.fileExists(atPath: processedFolderURL.path) {

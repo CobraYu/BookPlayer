@@ -108,18 +108,25 @@ public class ImportOperation: Operation {
 
                 let hash = hexString(fromArray: finalDigest)
                 let ext = file.originalUrl.pathExtension
-                let filename = hash + ".\(ext)"
+                let filename = file.originalUrl.deletingPathExtension().lastPathComponent + hash + ".\(ext)" //hash + ".\(ext)"
+                print(filename)
                 let destinationURL = file.destinationFolder.appendingPathComponent(filename)
+                print(destinationURL)
 
                 do {
                     if !FileManager.default.fileExists(atPath: destinationURL.path) {
                         try FileManager.default.moveItem(at: file.originalUrl, to: destinationURL)
                         try (destinationURL as NSURL).setResourceValue(URLFileProtection.none, forKey: .fileProtectionKey)
+                        if let derp = hash.data(using: .utf8) {
+                            print("setting extended attribute")
+                            try destinationURL.setExtendedAttribute(data: derp, forName: "com.bookplayer.app")
+                            print("set successful")
+                        }
                     } else {
                         try FileManager.default.removeItem(at: file.originalUrl)
                     }
                 } catch {
-                    fatalError("Fail to move file from \(file.originalUrl) to \(destinationURL)")
+                    fatalError("Error: \(error). Fail to move file from \(file.originalUrl) to \(destinationURL)")
                 }
 
                 file.processedUrl = destinationURL
